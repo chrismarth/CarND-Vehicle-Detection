@@ -3,13 +3,14 @@ import numpy as np
 from skimage.feature import hog
 
 
-def get_hog_features(img, orient, pix_per_cell, cell_per_block, vis=False):
+def get_hog_features(img, orient, pix_per_cell, cell_per_block, feature_vec=True, vis=False):
     """
 
     :param img: 
     :param orient: 
     :param pix_per_cell: 
-    :param cell_per_block: 
+    :param cell_per_block:
+    :param feature_vec
     :param vis: 
     :return: 
     """
@@ -19,12 +20,14 @@ def get_hog_features(img, orient, pix_per_cell, cell_per_block, vis=False):
                    orientations=orient,
                    pixels_per_cell=(pix_per_cell, pix_per_cell),
                    cells_per_block=(cell_per_block, cell_per_block),
+                   feature_vector=feature_vec,
                    visualise=True)
     else:
         return hog(img,
                    orientations=orient,
                    pixels_per_cell=(pix_per_cell, pix_per_cell),
                    cells_per_block=(cell_per_block, cell_per_block),
+                   feature_vector=feature_vec,
                    visualise=False)
 
 

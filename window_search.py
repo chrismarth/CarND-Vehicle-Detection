@@ -14,11 +14,12 @@ def get_heatmap(heatmap, bbox_list, threshold):
     :param bbox_list: 
     :return: 
     """
+    heatmap[:, :] -= 1
     # Iterate through list of bboxes
     for box in bbox_list:
         # Add += 1 for all pixels inside each bbox
         # Assuming each "box" takes the form ((x1, y1), (x2, y2))
-        heatmap[box[0][1]:box[1][1], box[0][0]:box[1][0]] += 1
+        heatmap[box[0][1]:box[1][1], box[0][0]:box[1][0]] += 2
 
     # Apply the threshold to the heatmap
     heatmap[heatmap <= threshold] = 0
@@ -87,9 +88,9 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
     nysteps = (nyblocks - nblocks_per_window) // cells_per_step
 
     # Compute individual channel HOG features for the entire image
-    hog1 = get_hog_features(ch1, orient, pix_per_cell, cell_per_block, vis=False)
-    hog2 = get_hog_features(ch2, orient, pix_per_cell, cell_per_block, vis=False)
-    hog3 = get_hog_features(ch3, orient, pix_per_cell, cell_per_block, vis=False)
+    hog1 = get_hog_features(ch1, orient, pix_per_cell, cell_per_block, feature_vec=False)
+    hog2 = get_hog_features(ch2, orient, pix_per_cell, cell_per_block, feature_vec=False)
+    hog3 = get_hog_features(ch3, orient, pix_per_cell, cell_per_block, feature_vec=False)
 
     # List of bounding boxes where the model detects a vehicle
     bboxes = []
@@ -122,6 +123,6 @@ def find_cars(img, ystart, ystop, scale, svc, X_scaler, orient, pix_per_cell, ce
                 xbox_left = np.int(xleft * scale)
                 ytop_draw = np.int(ytop * scale)
                 win_draw = np.int(window * scale)
-                bboxes.append((xbox_left, ytop_draw + ystart), (xbox_left + win_draw, ytop_draw + win_draw + ystart))
+                bboxes.append(((xbox_left, ytop_draw + ystart), (xbox_left + win_draw, ytop_draw + win_draw + ystart)))
 
     return np.array(bboxes)
